@@ -11,6 +11,6 @@ const treatmentSchema = mongoose.Schema({
     type: Number,
     default: 0
   }
-}, { timestamp: true })
+}, { timestamps: true })
 
 module.exports = mongoose.model('Treatment', treatmentSchema)

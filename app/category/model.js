@@ -13,15 +13,13 @@ const categorySchema = mongoose.Schema({
     },
     name: {
       type: String,
-      require: [true, 'Nama Sub Kategori harus diisi'],
-      maxlength: [225, 'Panjang nama sub kategori harus antara 3 - 225 karakter'],
-      minlength: [3, 'Panjang nama sub kategori harus antara 3 - 225 karakter']
+      require: [true, 'Nama Sub Kategori harus diisi']
     },
     price: {
       type: Number,
       default: 0
     }
   }]
-}, { timestamp: true })
+}, { timestamps: true })
 
 module.exports = mongoose.model('Category', categorySchema)

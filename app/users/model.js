@@ -42,7 +42,7 @@ const userSchema = mongoose.Schema({
     maxlength: [13, 'Panjang nomor telpon harus antara 9 - 13 karakter'],
     minlength: [9, 'Panjang nomor telpon harus antara 9 - 13 karakter']
   }
-}, { timestamp: true })
+}, { timestamps: true })
 
 userSchema.path('email').validate(async function (value) {
   try {

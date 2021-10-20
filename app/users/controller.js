@@ -1,5 +1,6 @@
 const User = require('./model')
 const response = require('../../helpers/response')
+const bcrypt = require('bcryptjs')
 
 module.exports = {
   createUser: async (req, res) => {
@@ -20,6 +21,10 @@ module.exports = {
   updateUser: async (req, res) => {
     try {
       const payload = req.body
+
+      const HASH_ROUND = 10
+      payload.password = bcrypt.hashSync(payload.password, HASH_ROUND)
+
       const user = await User.findOneAndUpdate({
         _id: req.user._id
       }, payload, { new: true, runValidators: true })
