@@ -8,13 +8,28 @@ module.exports = {
       const count = await Transaction.countDocuments({ user: req.user._id })
       const history = await Transaction.find({ user: req.user._id }).sort({ updatedAt: -1 }).limit(5 * 1).skip((page - 1) * 5)
 
+      const countBalance = await Transaction.aggregate([
+        {
+          $match: { user: req.user._id }
+        },
+        {
+          $group: {
+            _id: '$user',
+            total: { $sum: '$total' }
+          }
+        }
+      ])
+
       const totalPage = Math.ceil(Number(count) / 5)
       return response(
         res,
         200,
         true,
         'History Transactions',
-        history,
+        {
+          data: history,
+          count: countBalance.length > 0 ? countBalance[0].total : 0
+        },
         {
           totalData: count,
           currentPage: page,
