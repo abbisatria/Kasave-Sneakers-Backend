@@ -4,6 +4,14 @@ const response = require('../../helpers/response')
 module.exports = {
   getTreatment: async (req, res) => {
     try {
+      const treatment = await Treatment.find()
+      return response(res, 200, true, 'List Treatment', treatment)
+    } catch (err) {
+      return response(res, 400, false, `${err.message || 'Bad Request'}`)
+    }
+  },
+  getDetailTreatment: async (req, res) => {
+    try {
       const { id } = req.params
 
       const treatment = await Treatment.findOne({ _id: id })
