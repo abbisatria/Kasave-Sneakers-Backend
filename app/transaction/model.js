@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
 const transactionSchema = mongoose.Schema({
+  orderId: {
+    type: String,
+    default: ''
+  },
   historyUser: {
     name: { type: String, require: [true, 'Nama player harus diisi'] },
     phoneNumber: {

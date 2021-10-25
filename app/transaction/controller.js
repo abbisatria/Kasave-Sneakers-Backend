@@ -4,9 +4,26 @@ const response = require('../../helpers/response')
 module.exports = {
   history: async (req, res) => {
     try {
-      const { page } = req.query
-      const count = await Transaction.countDocuments({ user: req.user._id })
-      const history = await Transaction.find({ user: req.user._id }).sort({ updatedAt: -1 }).limit(5 * 1).skip((page - 1) * 5)
+      const { page, keyword } = req.query
+
+      let criteria = {}
+
+      if (keyword.length) {
+        criteria = {
+          ...criteria,
+          orderId: { $regex: `${keyword}`, $options: 'i' }
+        }
+      }
+
+      if (req.user._id) {
+        criteria = {
+          ...criteria,
+          user: req.user._id
+        }
+      }
+
+      const count = await Transaction.countDocuments(criteria)
+      const history = await Transaction.find(criteria).sort({ updatedAt: -1 }).limit(5 * 1).skip((page - 1) * 5)
 
       const countBalance = await Transaction.aggregate([
         {
@@ -100,6 +117,10 @@ module.exports = {
       const transaction = new Transaction(payload)
 
       await transaction.save()
+
+      const orderId = transaction._id.toString()
+
+      await Transaction.findOneAndUpdate({ _id: transaction._id }, { ...payload, orderId: `#${orderId.substring(orderId.length - 6, orderId.length)}` })
 
       return response(res, 200, true, 'Transaction Success', transaction)
     } catch (err) {
