@@ -1,4 +1,5 @@
 const Transaction = require('./model')
+const Expense = require('../expense/model')
 const response = require('../../helpers/response')
 
 module.exports = {
@@ -85,10 +86,19 @@ module.exports = {
           }
         }
       ])
+      const countExpense = await Expense.aggregate([
+        {
+          $group: {
+            _id: '$id',
+            total: { $sum: '$price' }
+          }
+        }
+      ])
+
       const history = await Transaction.find({ user: req.user._id }).sort({ updatedAt: -1 }).limit(5 * 1).skip((1 - 1) * 5)
 
       const results = {
-        count: count.length > 0 ? count[0].total : 0,
+        count: count.length > 0 ? (countExpense.length > 0 ? (count[0].total - countExpense[0].total) : count[0].total) : 0,
         history
       }
 

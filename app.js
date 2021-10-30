@@ -10,6 +10,7 @@ const userRouter = require('./app/users/router')
 const categoryRouter = require('./app/category/router')
 const treatmentRouter = require('./app/treatment/router')
 const transactionRouter = require('./app/transaction/router')
+const expenseRouter = require('./app/expense/router')
 
 const app = express()
 const URL = '/api/v1'
@@ -30,6 +31,7 @@ app.use(`${URL}/auth`, authRouter)
 app.use(`${URL}/category`, categoryRouter)
 app.use(`${URL}/treatment`, treatmentRouter)
 app.use(`${URL}/transaction`, transactionRouter)
+app.use(`${URL}/expense`, expenseRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
