@@ -168,10 +168,6 @@
                             <p>Rp. 10.000</p>
                             {{/oneDay}}
                           </div>
-                          <div class="item">
-                            <p class="item-name">Discount</p>
-                            <p>{{discount}}%</p>
-                          </div>
                           {{#description}}
                           <div>
                             <p>Description</p>
@@ -180,6 +176,10 @@
                           {{/description}}
                         {{/data.historyItem}}
                         <div>
+                          <div class="item">
+                            <p class="item-name">Discount</p>
+                            <p>Rp. {{data.discount}}</p>
+                          </div>
                           <div class="item">
                             <p class="item-name">Total</p>
                             <p>Rp. {{data.total}}</p>

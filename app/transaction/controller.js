@@ -173,7 +173,8 @@ module.exports = {
         }),
         total: formatRupiah(total),
         paid: formatRupiah(paid),
-        change: formatRupiah(change)
+        change: formatRupiah(change),
+        discount: discount
       }
 
       sendEmail(email, `Transactions #${orderId.substring(orderId.length - 6, orderId.length)}`, 'Thanks for transaction', { resultEmail, orderId: `#${orderId.substring(orderId.length - 6, orderId.length)}` })
