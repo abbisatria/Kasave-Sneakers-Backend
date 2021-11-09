@@ -53,7 +53,8 @@ const transactionSchema = mongoose.Schema({
     type: String,
     enum: ['pending', 'success', 'failed'],
     default: 'pending'
-  }
+  },
+  discount: { type: Number, default: 0 }
 }, { timestamps: true })
 
 module.exports = mongoose.model('Transaction', transactionSchema)

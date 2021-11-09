@@ -110,7 +110,7 @@ module.exports = {
   },
   checkout: async (req, res) => {
     try {
-      const { total, paid, change, item, email } = req.body
+      const { total, paid, change, item, email, discount } = req.body
 
       const payload = {
         historyUser: {
@@ -123,7 +123,8 @@ module.exports = {
         paid: paid,
         change: change,
         status: 'success',
-        email: email
+        email: email,
+        discount: discount
       }
 
       const transaction = new Transaction(payload)
