@@ -162,12 +162,12 @@
                             <p>Rp. {{treatment.price}}</p>
                           </div>
                           {{/treatment.name}}
+                          {{#oneDay}}
                           <div class="item">
                             <p class="item-name">One day service</p>
-                            {{#oneDay}}
                             <p>Rp. 10.000</p>
-                            {{/oneDay}}
                           </div>
+                          {{/oneDay}}
                           {{#description}}
                           <div>
                             <p>Description</p>
@@ -178,7 +178,7 @@
                         <div>
                           <div class="item">
                             <p class="item-name">Discount</p>
-                            <p>Rp. {{data.discount}}</p>
+                            <p>{{data.discount}}%</p>
                           </div>
                           <div class="item">
                             <p class="item-name">Total</p>
