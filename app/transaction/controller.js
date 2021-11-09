@@ -1,6 +1,7 @@
 const Transaction = require('./model')
 const Expense = require('../expense/model')
 const response = require('../../helpers/response')
+const sendEmail = require('../../helpers/sendEmail')
 
 module.exports = {
   history: async (req, res) => {
@@ -109,7 +110,7 @@ module.exports = {
   },
   checkout: async (req, res) => {
     try {
-      const { total, paid, change, item } = req.body
+      const { total, paid, change, item, email } = req.body
 
       const payload = {
         historyUser: {
@@ -121,7 +122,8 @@ module.exports = {
         total: total,
         paid: paid,
         change: change,
-        status: 'success'
+        status: 'success',
+        email: email
       }
 
       const transaction = new Transaction(payload)
@@ -129,6 +131,51 @@ module.exports = {
       await transaction.save()
 
       const orderId = transaction._id.toString()
+
+      function formatRupiah (angka, prefix) {
+        const resultAngka = angka.toString()
+        const numberString = resultAngka.replace(/[^,\d]/g, '').toString()
+        const split = numberString.split(',')
+        const sisa = split[0].length % 3
+        let rupiah = split[0].substr(0, sisa)
+        const ribuan = split[0].substr(sisa).match(/\d{3}/gi)
+
+        if (ribuan) {
+          const separator = sisa ? '.' : ''
+          rupiah += separator + ribuan.join('.')
+        }
+
+        rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah
+        return prefix === undefined ? rupiah : rupiah ? 'Rp. ' + rupiah : ''
+      }
+
+      const resultEmail = {
+        historyItem: item.map(val => {
+          return {
+            category: {
+              name: val.category.name
+            },
+            subCategory: {
+              name: val.subCategory.name,
+              price: formatRupiah(val.subCategory.price)
+            },
+            treatment: {
+              name: val.treatment.name,
+              price: formatRupiah(val.treatment.price)
+            },
+            name: val.name,
+            discount: val.discount,
+            description: val.description,
+            oneDay: val.oneDay,
+            total: formatRupiah(val.total)
+          }
+        }),
+        total: formatRupiah(total),
+        paid: formatRupiah(paid),
+        change: formatRupiah(change)
+      }
+
+      sendEmail(email, `Transactions #${orderId.substring(orderId.length - 6, orderId.length)}`, 'Thanks for transaction', { resultEmail, orderId: `#${orderId.substring(orderId.length - 6, orderId.length)}` })
 
       await Transaction.findOneAndUpdate({ _id: transaction._id }, { ...payload, orderId: `#${orderId.substring(orderId.length - 6, orderId.length)}` })
 

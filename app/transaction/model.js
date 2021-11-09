@@ -45,6 +45,10 @@ const transactionSchema = mongoose.Schema({
   change: {
     type: Number
   },
+  email: {
+    type: String,
+    default: ''
+  },
   status: {
     type: String,
     enum: ['pending', 'success', 'failed'],
