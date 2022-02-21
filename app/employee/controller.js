@@ -8,7 +8,7 @@ module.exports = {
 
       let criteria = {}
 
-      if (keyword.length) {
+      if (keyword) {
         criteria = {
           ...criteria,
           name: { $regex: `${keyword}`, $options: 'i' }
