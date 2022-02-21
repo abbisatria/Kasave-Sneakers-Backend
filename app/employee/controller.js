@@ -4,7 +4,7 @@ const response = require('../../helpers/response')
 module.exports = {
   listEmployee: async (req, res) => {
     try {
-      const { page, keyword, show } = req.query
+      const { page, keyword, show } = req.body
 
       let criteria = {}
 
@@ -37,7 +37,7 @@ module.exports = {
   },
   getDetailEmployee: async (req, res) => {
     try {
-      const { id } = req.params
+      const { id } = req.body
 
       const employee = await Employee.findOne({ _id: id })
       if (employee) {
@@ -51,7 +51,12 @@ module.exports = {
   },
   createEmployee: async (req, res) => {
     try {
-      const payload = req.body
+      const { name, salary, age } = req.body
+      const payload = {
+        name,
+        salary,
+        age
+      }
 
       const employee = await Employee(payload)
       await employee.save()
@@ -63,8 +68,13 @@ module.exports = {
   },
   updateEmployee: async (req, res) => {
     try {
-      const { id } = req.params
-      const payload = req.body
+      const { id } = req.body
+      const { name, salary, age } = req.body
+      const payload = {
+        name,
+        salary,
+        age
+      }
 
       await Employee.findOneAndUpdate({
         _id: id
@@ -77,7 +87,7 @@ module.exports = {
   },
   deleteEmployee: async (req, res) => {
     try {
-      const { id } = req.params
+      const { id } = req.body
 
       const employee = await Employee.findOne({ _id: id })
       if (employee) {
