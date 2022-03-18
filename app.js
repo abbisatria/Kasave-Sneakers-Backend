@@ -15,7 +15,7 @@ const employeeRouter = require('./app/employee/router')
 
 const app = express()
 const URL = '/api/v1'
-app.use(cors())
+app.use(cors('*'))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
